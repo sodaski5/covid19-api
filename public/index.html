@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>COVID-19 API UI</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <h1>COVID-19 API Information</h1>
+    
+    <div class="button-container">
+        <button class="button" onclick="getGermanyData()">Get Germany Data</button>
+        <input type="text" id="stateAbbreviation" placeholder="Enter State Abbreviation" oninput="this.value = this.value.toUpperCase()" >
+        <button class="button" onclick="getStateDataByAbbreviation()">Get Specific State Data</button>
+        <label for="days">Latest Cases Info By Days:</label>
+        <input type="number" id="days" placeholder="Enter Days for Cases">
+        <button class="button" onclick="getCasesHistory()">Get Cases Data</button>
+        <label for="death-days">Latest Death Info by Days:</label>
+        <input type="number" id="death-days" placeholder="Enter Days for death">
+        <button class="button" onclick="getDeathsHistory()">Get Death Data</button>
+        <br>
+        <button class="health" onclick="performHealthCheck()">Health Check</button> <!-- Add the Health Check button -->
+    </div>
+
+    <p>Entire Germany information</p>
+    <div id="germanyData" class="data-container"></div>
+    <p>Specific state information</p>
+    <div id="stateData" class="data-container"></div>
+    <p>Cases - latest cases</p>
+    <div id="casesHistory" class="data-container"></div>
+    <p>Deaths - latest deaths</p>
+    <div id="deathsHistory" class="data-container"></div>
+    
+    <script>
+        async function getGermanyData() {
+            try {
+                const response = await fetch('/germany');
+                const data = await response.json();
+                document.getElementById('germanyData').innerHTML = `<pre class="data">${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                console.error(error);
+                document.getElementById('germanyData').innerHTML = '<div class="data">Error fetching Germany data</div>';
+            }
+        }
+
+        async function getStateDataByAbbreviation() {
+            const abbreviation = document.getElementById('stateAbbreviation').value;
+            try {
+                const response = await fetch(`/states/${abbreviation}`);
+                const data = await response.json();
+                document.getElementById('stateData').innerHTML = `<pre class="data">${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                console.error(error);
+                document.getElementById('stateData').innerHTML = '<div class="data">Error: please provide a state abbreviation eg. "HH"</div>';
+            }
+        }
+
+        async function getCasesHistory() {
+            const days = document.getElementById('days').value;
+            try {
+                const response = await fetch(`/cases/history/${days}`);
+                const data = await response.json();
+                document.getElementById('casesHistory').innerHTML = `<pre class="data">${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                console.error(error);
+                document.getElementById('casesHistory').innerHTML = '<div class="data">Error fetching Cases History</div>';
+            }
+        }
+
+        async function getDeathsHistory() {
+            const days = document.getElementById('death-days').value;
+            try {
+                const response = await fetch(`/deaths/history/${days}`);
+                const data = await response.json();
+                document.getElementById('deathsHistory').innerHTML = `<pre class="data">${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                console.error(error);
+                document.getElementById('deathsHistory').innerHTML = '<div class="data">Error fetching Deaths History</div>';
+            }
+        }
+
+        async function performHealthCheck() {
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                alert('Health Check Status: ' + data.status);
+            } catch (error) {
+                console.error(error);
+                alert('Error performing Health Check');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "covid19-api",
+  "version": "1.0.0",
+  "description": "A COVID-19 API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "test": "jest --detectOpenHandles"
+  },
+  "keywords": [],
+  "author": "Sadiq",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.5.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1",
+    "supertest": "^6.3.3",
+    "dotenv": "^10.0.0"
+  }
+}
